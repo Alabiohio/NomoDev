@@ -42,7 +42,7 @@ export default function Home() {
           </h1>
 
           <p className="max-w-[500px] [font-family:'TT_Hoves-Regular',Helvetica] font-normal text-grey text-lg tracking-normal leading-relaxed">
-            Are you Ready to get something new from us? Subscribe to our newsletter to get the latest updates.
+            Are you ready to get something new from us? Subscribe to our newsletter to get the latest updates.
           </p>
         </header>
 
