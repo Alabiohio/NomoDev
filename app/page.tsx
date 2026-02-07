@@ -1,14 +1,58 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 import RocketLaunchFlatline from "@/public/assets/147-rocket-launch-flatline.png";
 import group18622 from "@/public/assets/group-18622.png";
+import supabase from "@/lib/supabase";
 
 export default function Home() {
-  const handleAction = async (formData: FormData) => {
-    const email = formData.get("email");
-    console.log("Email submitted:", email);
-    // Add your submission logic here
+  const [status, setStatus] = React.useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = React.useState<string | null>(null);
+
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (status === "loading") return;
+    const form = e.currentTarget as HTMLFormElement;
+    const formData = new FormData(form);
+    const email = formData.get("email")?.toString().trim();
+    if (!email) return;
+
+    setStatus("loading");
+    setMessage(null);
+
+    try {
+      const { error } = await supabase.from("subscribers").insert([{ email }]);
+      if (error) {
+        console.error("Supabase error:", error);
+        setStatus("error");
+        if ((error).code === "23505") {
+          // Unique violation (already subscribed)
+          setMessage("This email is already subscribed.");
+        } else {
+          setMessage(error.message || "Failed to subscribe.");
+        }
+      } else {
+        setStatus("success");
+        setMessage("Thanks — you’re subscribed!");
+        form.reset();
+      }
+    } catch (err: unknown) {
+      console.error("Unexpected error:", err);
+      setStatus("error");
+      if (err instanceof Error) {
+        setMessage(err.message || "Unexpected error occurred.");
+      } else if (typeof err === "string") {
+        setMessage(err);
+      } else {
+        setMessage("Unexpected error occurred.");
+      }
+    } finally {
+      window.setTimeout(() => {
+        setStatus("idle");
+        setMessage(null);
+      }, 4000);
+    }
   };
 
   return (
@@ -49,7 +93,7 @@ export default function Home() {
         {/* Subscription Form */}
         <form
           className="w-full flex flex-col md:flex-row gap-4 items-stretch"
-          action={handleAction}
+          onSubmit={handleSubmit}
           aria-label="Newsletter subscription form"
         >
           <div className="flex-1 relative group">
@@ -64,6 +108,7 @@ export default function Home() {
               type="email"
               placeholder="Enter your email address"
               required
+              disabled={status === "loading"}
               className="relative z-10 w-full h-[64px] px-8 font-medium text-dark text-lg bg-transparent outline-none placeholder:text-grey/50"
               aria-required="true"
             />
@@ -71,12 +116,40 @@ export default function Home() {
 
           <button
             type="submit"
-            className="h-[64px] px-10 flex items-center justify-center cursor-pointer bg-button text-white rounded-2xl font-bold text-lg hover:scale-[1.02] hover:shadow-2xl hover:shadow-button/20 active:scale-95 transition-premium whitespace-nowrap z-10"
+            disabled={status === "loading"}
+            aria-busy={status === "loading"}
+            className="h-[64px] px-10 flex items-center justify-center cursor-pointer bg-button text-white rounded-2xl font-bold text-lg hover:scale-[1.02] hover:shadow-2xl hover:shadow-button/20 active:scale-95 transition-premium whitespace-nowrap z-10 disabled:opacity-60 disabled:cursor-not-allowed"
             aria-label="Subscribe to newsletter"
           >
-            Subscribe
+            {status === "loading" ? (
+              <>
+                <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                </svg>
+                Subscribing...
+              </>
+            ) : (
+              "Subscribe"
+            )}
           </button>
         </form>
+
+        <div aria-live="polite" className="mt-3 min-h-[1.25rem]">
+          {message && (
+            <div
+              className={
+                status === "success"
+                  ? "text-green-600 font-medium"
+                  : status === "error"
+                    ? "text-red-600 font-medium"
+                    : "text-grey"
+              }
+            >
+              {message}
+            </div>
+          )}
+        </div>
 
         {/* Footer info (subtle) */}
         <footer className="text-grey/40 text-sm font-medium animate-fade-in" style={{ animationDelay: '0.6s' }}>
