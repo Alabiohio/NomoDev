@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import RocketLaunchFlatline from "@/public/assets/147-rocket-launch-flatline.png";
 import group18622 from "@/public/assets/group-18622.png";
-import supabase from "@/lib/supabase";
+
 
 export default function Home() {
   const [status, setStatus] = React.useState<"idle" | "loading" | "success" | "error">("idle");
@@ -22,23 +22,23 @@ export default function Home() {
     setMessage(null);
 
     try {
-      const { error } = await supabase.from("subscribers").insert([{ email }]);
-      if (error) {
-        console.error("Supabase error:", error);
-        setStatus("error");
-        if ((error).code === "23505") {
-          // Unique violation (already subscribed)
-          setMessage("This email is already subscribed.");
-        } else {
-          setMessage(error.message || "Failed to subscribe.");
-        }
-      } else {
-        setStatus("success");
-        setMessage("Thanks — you’re subscribed!");
-        form.reset();
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to subscribe.");
       }
+
+      setStatus("success");
+      setMessage(data.message || "Thanks — you’re subscribed!");
+      form.reset();
     } catch (err: unknown) {
-      console.error("Unexpected error:", err);
+      console.error("Subscription error:", err);
       setStatus("error");
       if (err instanceof Error) {
         setMessage(err.message || "Unexpected error occurred.");
