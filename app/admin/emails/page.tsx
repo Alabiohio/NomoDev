@@ -156,7 +156,7 @@ export default function AdminNewsletterPage() {
             </main>
 
             <footer className="mt-20 py-12 border-t border-white/5 text-center text-gray-600 text-[10px] uppercase tracking-[0.3em] font-bold">
-                &copy; {new Date().getFullYear()} Nomo Engine &bull; Communications Module v1.0
+                &copy; {new Date().getFullYear()} Nomo Engine Labs
             </footer>
         </div>
     );
