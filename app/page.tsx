@@ -166,7 +166,7 @@ export default function Home() {
       </div>
 
       <div className="relative z-10 w-full max-w-[1440px] min-h-screen flex flex-col">
-        <header className="w-full h-[100px] border-b border-white/10 flex items-center justify-between px-6 md:px-24 relative z-50">
+        <header className="w-full h-[100px] flex items-center justify-between px-6 md:px-24 relative z-50">
           <a href="/" className="block">
             <div
               className="w-[127px] h-[40px] bg-[url(/assets/logo.png)] bg-contain bg-no-repeat bg-center"
@@ -175,9 +175,9 @@ export default function Home() {
             />
           </a>
 
-          {/* Desktop Nav */}
+          {/* Desktop Nav - Centered */}
           <nav
-            className="hidden md:flex items-center gap-[30px]"
+            className="hidden md:flex items-center gap-[30px] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
             role="navigation"
             aria-label="Main navigation"
           >
@@ -185,7 +185,7 @@ export default function Home() {
               <a
                 key={index}
                 href={item.href}
-                className="font-normal text-white text-base hover:text-[#00c4f4] transition-colors"
+                className="font-normal text-white text-base hover:text-[#00c4f4] transition-colors whitespace-nowrap"
               >
                 {item.label}
               </a>
