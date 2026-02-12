@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Geist_Mono } from "next/font/google";
+import { Outfit, Geist_Mono, Rubik } from "next/font/google";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -9,6 +9,11 @@ const outfit = Outfit({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const rubik = Rubik({
+  variable: "--font-rubik",
   subsets: ["latin"],
 });
 
@@ -25,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${outfit.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${outfit.variable} ${geistMono.variable} ${rubik.variable} font-sans antialiased`}
       >
         {children}
       </body>
