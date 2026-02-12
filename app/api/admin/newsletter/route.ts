@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function GET() {
     try {
+        const supabase = await createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
         const { data, error } = await supabase
             .from('subscribers')
             .select('email, created_at')
@@ -21,6 +28,13 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
     try {
+        const supabase = await createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
         const { subject, content, recipientType, specificEmail } = await req.json();
 
         if (!subject || !content) {
@@ -36,7 +50,7 @@ export async function POST(req: NextRequest) {
                 .select('email');
 
             if (error) throw error;
-            recipients = data.map(sub => sub.email);
+            recipients = data.map((sub: any) => sub.email);
         } else if (recipientType === "single" && specificEmail) {
             recipients = [specificEmail];
         }
@@ -80,6 +94,34 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: true, count: recipients.length, data });
     } catch (error: any) {
         console.error("Newsletter Send Error:", error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+}
+
+export async function DELETE(req: NextRequest) {
+    try {
+        const supabase = await createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        const { email } = await req.json();
+
+        if (!email) {
+            return NextResponse.json({ error: "Email is required" }, { status: 400 });
+        }
+
+        const { error } = await supabase
+            .from('subscribers')
+            .delete()
+            .eq('email', email);
+
+        if (error) throw error;
+
+        return NextResponse.json({ success: true });
+    } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

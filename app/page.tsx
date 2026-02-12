@@ -32,32 +32,27 @@ export default function Home() {
     seconds: 0,
   });
 
-  const navItems: NavItem[] = [
-    { label: "FEATURES", href: "#features" },
-    { label: "TECHNOLOGY", href: "#technology" },
-    { label: "WAITLIST", href: "#waitlist" },
-    { label: "RESOURCES", href: "#resources" },
-  ];
+
 
   const socialLinks: SocialLink[] = [
     {
       name: "Instagram",
       icon: (
-        <div className="relative w-5 h-5 flex items-center justify-center rounded-[6px] overflow-hidden bg-[radial-gradient(circle_at_30%_107%,#fdf497_0%,#fdf497_5%,#fd5949_45%,#d6249f_60%,#285AEB_90%)]">
-          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <div className="relative w-8 h-8 flex items-center justify-center rounded-[8px] overflow-hidden bg-[radial-gradient(circle_at_30%_107%,#fdf497_0%,#fdf497_5%,#fd5949_45%,#d6249f_60%,#285AEB_90%)]">
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
             <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
             <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
           </svg>
         </div>
       ),
-      href: "#instagram",
+      href: "https://www.instagram.com/n0mo_labs?igsh=MWdmZHBzb2pmeHRqcw==",
     },
     {
       name: "Facebook",
       icon: (
-        <div className="flex items-center justify-center w-5 h-5 bg-[#1877F2] rounded-full">
-          <svg className="w-3 h-3 fill-white" viewBox="0 0 24 24">
+        <div className="flex items-center justify-center w-8 h-8 bg-[#1877F2] rounded-full">
+          <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
             <path d="M24 12.073c0-6.627-5.373-12.073-12-12.073s-12 5.446-12 12.073c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
           </svg>
         </div>
@@ -65,15 +60,26 @@ export default function Home() {
       href: "#facebook",
     },
     {
-      name: "Twitter",
+      name: "X",
       icon: (
-        <div className="flex items-center justify-center w-5 h-5 bg-[#1DA1F2] rounded-full">
-          <svg className="w-3 h-3 fill-white" viewBox="0 0 24 24">
-            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+        <div className="flex items-center justify-center w-8 h-8 bg-black rounded-full">
+          <svg className="w-4.5 h-4.5 fill-white" viewBox="0 0 24 24">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
           </svg>
         </div>
       ),
-      href: "#twitter",
+      href: "https://x.com/NomoSATMr",
+    },
+    {
+      name: "Discord",
+      icon: (
+        <div className="flex items-center justify-center w-8 h-8 bg-[#5865F2] rounded-full">
+          <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
+            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.666 4.37a.071.071 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+          </svg>
+        </div>
+      ),
+      href: "#discord",
     },
   ];
 
@@ -143,7 +149,7 @@ export default function Home() {
     }
   };
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
 
   const formatTimeUnit = (value: number): string => {
     return value.toString().padStart(2, "0");
@@ -166,7 +172,7 @@ export default function Home() {
       </div>
 
       <div className="relative z-10 w-full max-w-[1440px] min-h-screen flex flex-col">
-        <header className="w-full h-[100px] flex items-center justify-between px-6 md:px-24 relative z-50">
+        <header className="w-full h-[100px] flex items-center px-6 md:px-24 relative z-50">
           <a href="/" className="block">
             <div
               className="w-[127px] h-[40px] bg-[url(/assets/logo.png)] bg-contain bg-no-repeat bg-center"
@@ -174,81 +180,18 @@ export default function Home() {
               aria-label="Nomo logo"
             />
           </a>
-
-          {/* Desktop Nav - Centered */}
-          <nav
-            className="hidden md:flex items-center gap-[30px] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-            role="navigation"
-            aria-label="Main navigation"
-          >
-            {navItems.map((item, index) => (
-              <a
-                key={index}
-                href={item.href}
-                className="font-normal text-white text-base hover:text-[#00c4f4] transition-colors whitespace-nowrap"
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
-
-          {/* Mobile Menu Toggle */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 text-white hover:text-[#00c4f4] transition-colors z-50"
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          >
-            {isMenuOpen ? (
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-              </svg>
-            )}
-          </button>
-
-          {/* Mobile Nav Drawer */}
-          <div
-            className={`md:hidden fixed inset-0 bg-[#160e33] transition-all duration-300 ease-in-out z-40 flex flex-col items-center justify-center gap-8 ${isMenuOpen ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none"
-              }`}
-          >
-            {navItems.map((item, index) => (
-              <a
-                key={index}
-                href={item.href}
-                onClick={() => setIsMenuOpen(false)}
-                className="text-white text-2xl font-medium tracking-widest hover:text-[#00c4f4] transition-colors"
-              >
-                {item.label}
-              </a>
-            ))}
-            <div className="flex gap-6 mt-8">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.href}
-                  className="p-3 bg-white/5 rounded-full hover:bg-white/10 transition-all duration-300 transform active:scale-95 group"
-                  aria-label={social.name}
-                >
-                  <div className="scale-125 transition-all duration-300">
-                    {social.icon}
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
         </header>
 
         <main className="flex-1 flex flex-col items-center justify-center px-6 py-12">
-          <h1 className="font-rubik font-bold text-white text-4xl md:text-6xl lg:text-[80px] text-center tracking-tight leading-tight mb-4">
-            Trade smarter while
-            <br />
-            Nomo does the work
-          </h1>
+          <div className="max-w-[1100px] mx-auto text-center mb-8">
+            <h1 className="font-rubik font-semibold text-white text-2xl md:text-5xl lg:text-6xl tracking-tight leading-[1.15]">
+              <span className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-[#00c4f4] to-[#285AEB] mb-2">SATM:</span>
+              <br className="md:hidden" />
+              {" "}Adaptive trading intelligence that combines institutional logic, statistical modeling, and real-time market structure analysis across Crypto, Indices, Forex and Commodities.
+            </h1>
+          </div>
 
-          <p className="font-rubik font-normal text-white text-xl md:text-3xl text-center mb-8">
+          <p className="font-rubik font-normal text-white font-semibold text-xl md:text-3xl text-center mb-8">
             Coming Soon
           </p>
 
@@ -279,8 +222,8 @@ export default function Home() {
             </div>
           </div>
 
-          <h2 className="font-rubik font-semibold text-white/90 text-xl md:text-2xl text-center mb-8 tracking-wide">
-            Subscribe to our newsletter to receive updates
+          <h2 className="font-rubik text-white/90 text-x md:text-2xl text-center mb-8 tracking-wide">
+            Get early access to SATM predictions, strategy breakdowns, and system updates before launch.
           </h2>
 
           <form
@@ -354,15 +297,12 @@ export default function Home() {
                 <a
                   key={index}
                   href={social.href}
-                  className="flex items-center gap-3 text-white/80 hover:text-white transition-all group"
+                  className="flex items-center text-white/80 hover:text-white transition-all group"
                   aria-label={social.name}
                 >
                   <div className="transition-all duration-300 transform group-hover:scale-110">
                     {social.icon}
                   </div>
-                  <span className="font-rubik font-normal text-lg md:text-xl">
-                    {social.name}
-                  </span>
                 </a>
               ))}
             </nav>

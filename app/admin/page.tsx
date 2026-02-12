@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import logo from "@/public/assets/logoDark.png";
+import { useRouter } from "next/navigation";
+
+import { createClient } from "@/lib/supabase/client";
 
 interface Stats {
     total: number;
@@ -22,6 +25,8 @@ export default function AdminOverviewPage() {
     const [activity, setActivity] = useState<Activity[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const router = useRouter();
+    const supabaseClient = createClient();
 
     useEffect(() => {
         fetchDashboardData();
@@ -39,6 +44,12 @@ export default function AdminOverviewPage() {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleLogout = async () => {
+        await supabaseClient.auth.signOut();
+        router.push("/login");
+        router.refresh();
     };
 
     const handleExportCSV = async () => {
@@ -64,6 +75,26 @@ export default function AdminOverviewPage() {
         } catch (err) {
             console.error("Failed to export CSV", err);
             alert("Failed to export subscribers. Please try again.");
+        }
+    };
+
+    const handleDeleteSubscriber = async (email: string) => {
+        if (window.confirm(`Are you sure you want to delete ${email}?`)) {
+            try {
+                const res = await fetch("/api/admin/newsletter", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email }),
+                });
+                if (res.ok) {
+                    fetchDashboardData();
+                } else {
+                    alert("Failed to delete subscriber");
+                }
+            } catch (err) {
+                console.error("Delete error:", err);
+                alert("An error occurred while deleting");
+            }
         }
     };
 
@@ -93,6 +124,13 @@ export default function AdminOverviewPage() {
                     <nav className="hidden md:flex items-center gap-1 font-medium text-sm text-[#13314b]/60">
                         <a href="/admin" className="px-5 py-2 rounded-full bg-[#13314b]/5 text-[#13314b] border border-[#13314b]/10 transition-all font-bold">Overview</a>
                         <a href="/admin/emails" className="px-5 py-2 rounded-full hover:text-[#13314b] hover:bg-[#13314b]/5 transition-all">Emails</a>
+                        <div className="h-4 w-[1px] bg-[#13314b]/10 mx-2"></div>
+                        <button
+                            onClick={handleLogout}
+                            className="px-5 py-2 rounded-full hover:text-red-600 hover:bg-red-50 transition-all"
+                        >
+                            Logout
+                        </button>
                     </nav>
 
                     {/* Mobile Menu Toggle */}
@@ -113,6 +151,12 @@ export default function AdminOverviewPage() {
                     <nav className="flex flex-col p-4 gap-2">
                         <a href="/admin" className="px-4 py-3 rounded-xl bg-[#13314b]/5 text-[#13314b] border border-[#13314b]/10 transition-all font-bold">Overview</a>
                         <a href="/admin/emails" className="px-4 py-3 rounded-xl hover:bg-[#13314b]/5 text-[#13314b]/60 hover:text-[#13314b] transition-all font-medium">Emails</a>
+                        <button
+                            onClick={handleLogout}
+                            className="px-4 py-3 rounded-xl hover:bg-red-50 text-red-600 transition-all font-medium text-left"
+                        >
+                            Logout
+                        </button>
                     </nav>
                 </div>
             </header>
@@ -161,17 +205,26 @@ export default function AdminOverviewPage() {
                         <div className="space-y-4">
                             {activity.map((item, idx) => (
                                 <div key={idx} className="flex items-center justify-between p-4 bg-[#13314b]/[0.02] border border-[#13314b]/5 rounded-xl hover:bg-[#13314b]/[0.04] transition-all">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#13314b] to-blue-600 flex items-center justify-center font-bold text-xs text-white">
+                                    <div className="flex items-center gap-4 min-w-0">
+                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#13314b] to-blue-600 flex items-center justify-center font-bold text-xs text-white shrink-0">
                                             {item.email[0].toUpperCase()}
                                         </div>
-                                        <div>
-                                            <div className="font-medium">{item.email}</div>
+                                        <div className="min-w-0">
+                                            <div className="font-medium truncate">{item.email}</div>
                                             <div className="text-[10px] text-[#13314b]/40 uppercase font-bold tracking-widest mt-0.5">New Subscriber</div>
                                         </div>
                                     </div>
-                                    <div className="text-xs text-[#13314b]/40">
-                                        {new Date(item.created_at).toLocaleString()}
+                                    <div className="text-xs text-[#13314b]/40 shrink-0 whitespace-nowrap ml-4 flex items-center gap-4">
+                                        {new Date(item.created_at).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                                        <button
+                                            onClick={() => handleDeleteSubscriber(item.email)}
+                                            className="md:opacity-0 md:group-hover:opacity-100 transition-opacity p-2 hover:bg-red-50 rounded-lg text-red-500"
+                                            title="Delete Subscriber"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -209,7 +262,7 @@ export default function AdminOverviewPage() {
             </main>
 
             <footer className="mt-20 py-12 border-t border-white/5 text-center text-gray-600 text-[10px] uppercase tracking-[0.3em] font-bold">
-                &copy; {new Date().getFullYear()} Nomo Engine labs
+                &copy; {new Date().getFullYear()} Nomo Labs
             </footer>
         </div>
     );

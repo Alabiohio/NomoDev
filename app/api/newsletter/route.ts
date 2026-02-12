@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         await resend.emails.send({
             from: fromEmail,
             to: email,
-            subject: "Welcome to Nomo!",
+            subject: "You're in — NOMOLABS",
             html: newsletterWelcomeTemplate(email),
         });
 

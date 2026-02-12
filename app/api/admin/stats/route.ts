@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 
 export async function GET() {
     try {
+        const supabase = await createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
         // 1. Total Subscribers
         const { count: totalSubscribers, error: countError } = await supabase
             .from('subscribers')
@@ -42,7 +49,7 @@ export async function GET() {
                 newThisWeek: newThisWeek || 0,
                 growthRate: growthRate,
                 supabaseStatus: 'connected',
-                resendStatus: 'active' // We assume active if env is present
+                //resendStatus: 'active' // We assume active if env is present
             },
             recentActivity: recentSubscribers
         });

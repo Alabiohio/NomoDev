@@ -5,6 +5,8 @@ import Image from "next/image";
 import logo from "@/public/assets/logoDark.png";
 import { SubscriberList } from "./components/SubscriberList";
 import { EmailComposer } from "./components/EmailComposer";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 interface Subscriber {
     email: string;
@@ -16,6 +18,8 @@ export default function AdminNewsletterPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [isSubscribersOpen, setIsSubscribersOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const router = useRouter();
+    const supabase = createClient();
 
     useEffect(() => {
         fetchSubscribers();
@@ -36,6 +40,12 @@ export default function AdminNewsletterPage() {
 
     const handleSendSuccess = (count: number) => {
         console.log(`Successfully sent to ${count} users`);
+    };
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        router.push("/login");
+        router.refresh();
     };
 
     return (
@@ -64,7 +74,7 @@ export default function AdminNewsletterPage() {
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
-                    <SubscriberList subscribers={subscribers} />
+                    <SubscriberList subscribers={subscribers} onDelete={fetchSubscribers} />
                 </div>
             </div>
 
@@ -104,6 +114,13 @@ export default function AdminNewsletterPage() {
                             <span className="bg-[#13314b] text-white text-[10px] px-1.5 py-0.5 rounded-md font-bold">
                                 {subscribers.length}
                             </span>
+                        </button>
+                        <div className="h-4 w-[1px] bg-[#13314b]/10 mx-2"></div>
+                        <button
+                            onClick={handleLogout}
+                            className="px-5 py-2 rounded-full hover:text-red-600 hover:bg-red-50 transition-all font-medium text-sm"
+                        >
+                            Logout
                         </button>
                     </nav>
 
@@ -145,6 +162,12 @@ export default function AdminNewsletterPage() {
                                 {subscribers.length}
                             </span>
                         </button>
+                        <button
+                            onClick={handleLogout}
+                            className="px-4 py-3 rounded-xl hover:bg-red-50 text-red-600 transition-all font-medium text-left"
+                        >
+                            Logout
+                        </button>
                     </nav>
                 </div>
             </header>
@@ -156,7 +179,7 @@ export default function AdminNewsletterPage() {
             </main>
 
             <footer className="mt-20 py-12 border-t border-white/5 text-center text-gray-600 text-[10px] uppercase tracking-[0.3em] font-bold">
-                &copy; {new Date().getFullYear()} Nomo Engine Labs
+                &copy; {new Date().getFullYear()} Nomo Labs
             </footer>
         </div>
     );
